@@ -22466,18 +22466,34 @@ var estadosCidades = {
     ]
 };
 
-const getListaDeEstados = function() {
+const getListaDeEstados = function(siglaEstado) {
 
     let siglasJSON = {}
     let uf = []
+    let status = false
 
     estadosCidades.estados.forEach(function(estados) {
         uf.push(estados.sigla)
     })
+    estadosCidades.estados.forEach(function(estados) {
 
-    siglasJSON = { uf: uf, quantidade: estadosCidades.estados.length }
-    return siglasJSON
+        if (siglaEstado == estados.sigla) {
+            siglasJSON.uf = estados.sigla
+            siglasJSON.descricao = estados.nome
+            estadosJSON.capital = estados.capital
+            estadosJSON.regiao = estados.regiao
+            status = true
+        }
+    })
+
+    if (status == true) {
+        return siglasJSON
+    } else {
+        return status
+    }
 }
+    
+
 console.log(getListaDeEstados());
 console.log('\n')
 
