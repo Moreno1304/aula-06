@@ -76,27 +76,32 @@ app.get('/estados', cors(), async function(request, response, next) {
 
     // Recebe o valor da variavel UF, que sera ecaminhada na URL da requisição
     let siglaEstado = request.params.uf;
+    let statusCode 
+    let dadosEstado = {}
 
     if (siglaEstado == '' || siglaEstado == undefined || siglaEstado.length != 2 || !isNaN(siglaEstado))  
     {
-        response.status(400)
-        response.json({ menssage: "Não é possivel processar a requisição pois a sigla do estado não foi informada ou não a tende a quantidade de caracteres (2 digitos)" })
+        statusCode = 400
+        dadosEstado.menssage = "Não é possivel processar a requisição pois a sigla do estado não foi informada ou não a tende a quantidade de caracteres (2 digitos)"
     }else{
         //chama a função que filtra o estado pela sigla
         let estado = estadosCidades.getDadosEstados(siglaEstado)
         
         // Valida se houve retorno valido da função
         if(estado){
-        response.status(200) // Estado encontrado
-        response.json(estado)
+        statusCode = 200 // Estado encontrado
+        dadosEstado = estado
     }else{
 
-        response.status(400) // Estado não encontrado
-        response.json()
+        statusCode = 404 // Estado não encontrado
+        
     }
 
     
-}})
+}
+response.status(statusCode)
+response.json(dadosEstado)
+})
 
 // Permite carregar os endPointas criados e aguarda as requisições pelo protocolo http na porta 8080
 app.listen(8080, function() {
